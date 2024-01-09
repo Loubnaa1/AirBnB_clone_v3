@@ -79,7 +79,7 @@ class FileStorage:
             return None
 
     def count(self, cls=None):
-        """ count method"""
+        """ implementing count method"""
         if cls:
             list_cls = models.storage..all(cls)
             return len(list_cls)
