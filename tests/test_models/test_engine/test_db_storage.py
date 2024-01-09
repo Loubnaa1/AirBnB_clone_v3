@@ -86,32 +86,27 @@ class TestFileStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_save(self):
         """Test that save properly saves objects to file.json"""
-    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
-    def test_get(self):
-        """ testing get method with no param """
+    @unittest.skipIf(models.storage_t != 'db', "Skipping tests for non-db storage")
+    def test_get_method_without_args_raises_error(self):
+        """Verify get method raises TypeError when called without arguments."""
         with self.assertRaises(TypeError):
             storage.get()
 
-    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
-    def test_get_obj(self):
-        """ checking get method which
-        the return of an existing object """
+    def test_get_method_returns_correct_object(self):
+        """Ensure get method returns the correct object from the database."""
+        test_state = State(name="Cali")
+        test_state.save()
+        retrieved_state = storage.get(State, test_state.id)
+        self.assertEqual(test_state, retrieved_state)
 
-        state1 = State(name="Cali")
-        state1.save()
-        get_state = storage.get(State, state1.id)
-        self.assertEqual(state1, get_state)
+    def test_count_method_matches_all_records(self):
+        """Test if count method returns the total number of records in storage."""
+        total_records = len(storage.all())
+        counted_records = storage.count()
+        self.assertEqual(total_records, counted_records)
 
-    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
-    def test_count_all(self):
-        """ testing count method """
-        x = len(storage.all())
-        y = storage.count()
-        self.assertEqual(x, y)
-
-    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
-    def test_count_obj(self):
-        """ testing count method """
-        x = len(storage.all(State))
-        y = storage.count(State)
-        self.assertEqual(x, y)
+    def test_count_method_matches_specific_class_records(self):
+        """Check if count method correctly counts records of a specific class."""
+        total_state_records = len(storage.all(State))
+        counted_state_records = storage.count(State)
+        self.assertEqual(total_state_records, counted_state_records)
