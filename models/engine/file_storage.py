@@ -4,6 +4,7 @@ Contains the FileStorage class
 """
 
 import json
+import models
 from models.amenity import Amenity
 from models.base_model import BaseModel
 from models.city import City
@@ -11,6 +12,7 @@ from models.place import Place
 from models.review import Review
 from models.state import State
 from models.user import User
+from hashlib import md5
 
 classes = {"Amenity": Amenity, "BaseModel": BaseModel, "City": City,
            "Place": Place, "Review": Review, "State": State, "User": User}
@@ -72,7 +74,7 @@ class FileStorage:
     def get(self, cls, id):
         """ get method """
         if cls:
-            list_cls = models.storage..all(cls)
+            list_cls = models.storage.all(cls)
             for i in list_cls.values():
                 if i.id == id:
                     return i
@@ -81,7 +83,7 @@ class FileStorage:
     def count(self, cls=None):
         """ implementing count method"""
         if cls:
-            list_cls = models.storage..all(cls)
+            list_cls = models.storage.all(cls)
             return len(list_cls)
         else:
             dict_cls = self.all()

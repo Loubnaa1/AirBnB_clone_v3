@@ -78,7 +78,7 @@ class DBStorage:
     def get(self, cls, id):
         """ get method """
         if cls:
-            list_cls = models.storage..all(cls)
+            list_cls = models.storage.all(cls)
             for i in list_cls.values():
                 if i.id == id:
                     return i
@@ -87,7 +87,7 @@ class DBStorage:
     def count(self, cls=None):
         """ count method"""
         if cls:
-            list_cls = models.storage..all(cls)
+            list_cls = models.storage.all(cls)
             return len(list_cls)
         else:
             dict_cls = self.all()
