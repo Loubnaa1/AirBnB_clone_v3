@@ -114,27 +114,30 @@ class TestFileStorage(unittest.TestCase):
             js = f.read()
         self.assertEqual(json.loads(string), json.loads(js))
     @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
-    def test_get(self):
-        """ Tests method for obtaining an instance file storage"""
-        storage = FileStorage()
-        dic = {"name": "Vecindad"}
-        instance = State(**dic)
-        storage.new(instance)
-        storage.save()
-        storage = FileStorage()
-        get_instance = storage.get(State, instance.id)
-        self.assertEqual(get_instance, instance)
+    def test_get_obj(self):
+        """ checking get method which
+        the return of an existing object """
+        state1 = State()
+        state1.save()
+        get_state = storage.get(State, state1.id)
+        self.assertEqual(state1, get_state)
 
     @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
-    def test_count(self):
-        """ Tests count method file storage """
-        storage = FileStorage()
-        dic = {"name": "marwecox"}
-        state = State(**dic)
-        storage.new(state)
-        dic = {"name": "Moroc"}
-        city = City(**dic)
-        storage.new(city)
-        storage.save()
-        c = storage.count()
-        self.assertEqual(len(storage.all()), c)
+    def test_get(self):
+        """ testing get method with no param """
+        with self.assertRaises(TypeError):
+            storage.get()
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_count_all(self):
+        """ testing count method """
+        x = len(storage.all())
+        y = storage.count()
+        self.assertEqual(x, y)
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_count_obj(self):
+        """ testing count method """
+        x = len(storage.all(State))
+        y = storage.count(State)
+        self.assertEqual(x, y)
